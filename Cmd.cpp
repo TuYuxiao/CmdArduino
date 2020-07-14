@@ -38,7 +38,12 @@
     its possible to execute individual functions within the sketch.
 */
 /**************************************************************************/
-#include <avr/pgmspace.h>
+//#include <avr/pgmspace.h>
+#if (defined(AVR)) 
+	#include <avr\pgmspace.h> 
+#else
+	#include <pgmspace.h> 
+#endif
 #if ARDUINO >= 100
 #include <Arduino.h>
 #else
@@ -98,6 +103,12 @@ void cmd_parse(char *cmd)
     // parse the command line statement and break it up into space-delimited
     // strings. the array of strings will be saved in the argv array.
     argv[i] = strtok(cmd, " ");
+	if (argv[i] == NULL)
+	{
+		cmd_display();
+		return;
+	}
+	
     do
     {
         argv[++i] = strtok(NULL, " ");
